@@ -12,17 +12,14 @@
 
 import math
 
-red_text = "\u001b[0;31;m"
-normal_text = "\u001b[0;0;m"
-
 #######################################################################
-# Function: get_input
-# Description: Retrieves user input and checks for errors. Prompts user
-#              to try again if an error occurs
+# Function: get_numeric_input
+# Description: Retrieves numeric input and checks for errors. Prompts
+#              user to try again if an error occurs.
 # Parameters: message - a string prompting the user to input a value
 #             input_name - a string indicating what variable the user
 #                          entered. Used to make error messages input-
-#                          specific
+#                          specific.
 # Return values: The user's input converted to a float
 # Pre-Conditions: The user input a number
 # Post-Conditions: The input has been checked for errors and converted
@@ -30,18 +27,18 @@ normal_text = "\u001b[0;0;m"
 #######################################################################
 
 
-def get_input(message, input_name):
+def get_numeric_input(message, input_name):
     while True:
         user_input = input(message)
 
         if user_input.startswith("-"):
             # Input should not be negative. Prompt the user to try again
-            print(red_text + "Please enter a number greater than zero." + normal_text)
+            print("Please enter a number greater than zero.")
             continue
 
         # check that the input starts with a number
         if not user_input[0].isnumeric() and not user_input[0] == ".":
-            print(red_text + input_name + " must start with a number." + normal_text)
+            print(input_name, "must start with a number.")
             continue
 
         # remove any units from the end of the string, provided the string is not empty
@@ -101,12 +98,12 @@ print("\nThis program calculates the power output of a wind turbine, given its r
 
 while True:
     rho = 1.2
-    radius = get_input("Enter the turbine radius in meters: ", "Turbine radius")
-    windspeed = get_input("Enter the average wind speed in meters per second: ", "Wind speed")
+    radius = get_numeric_input("Enter the turbine radius in meters: ", "Turbine radius")
+    windspeed = get_numeric_input("Enter the average wind speed in meters per second: ", "Wind speed")
 
     while True:
-        efficiency = get_input("Enter the turbine's operating efficiency as a percent or decimal: ",
-                               "Operating efficiency")
+        efficiency = get_numeric_input("Enter the turbine's operating efficiency as a percent or decimal: ",
+                                       "Operating efficiency")
 
         # make sure the efficiency is no greater than 100%. Convert to decimal if above 1.0
         if efficiency > 100:
