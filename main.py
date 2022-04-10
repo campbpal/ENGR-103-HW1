@@ -10,6 +10,11 @@
 #                   2. Actual power output
 #######################################################################
 
+import math
+
+red_text = "\u001b[0;31;m"
+normal_text = "\u001b[0;0;m"
+
 #######################################################################
 # Function: get_input
 # Description: Retrieves user input and checks for errors. Prompts user
@@ -23,7 +28,6 @@
 # Post-Conditions: The input has been checked for errors and converted
 #                  to a float
 #######################################################################
-import math
 
 
 def get_input(message, input_name):
@@ -32,12 +36,12 @@ def get_input(message, input_name):
 
         if user_input.startswith("-"):
             # Input should not be negative. Prompt the user to try again
-            print("Please enter a number greater than zero.")
+            print(red_text + "Please enter a number greater than zero." + normal_text)
             continue
 
         # check that the input starts with a number
         if not user_input[0].isnumeric() and not user_input[0] == ".":
-            print(input_name, "must start with a number.")
+            print(red_text + input_name + " must start with a number." + normal_text)
             continue
 
         # remove any units from the end of the string, provided the string is not empty
@@ -90,8 +94,8 @@ def get_input(message, input_name):
         continue
 
 
-print("This program calculates the power output of a wind turbine, given its radius, the average wind speed, and the \n"
-      "operating efficiency of the turbine. The density of air is assumed to be 1.2 kg/m\u00b2. All values must be"
+print("\nThis program calculates the power output of a wind turbine, given its radius, the average wind speed, and the"
+      "\noperating efficiency of the turbine. The density of air is assumed to be 1.2 kg/m\u00b2. All values must be"
       " given \nas either an integer, a decimal, or a fraction. Scientific notation is not supported at this time. "
       "Units do \nnot need to be included. \n")
 
@@ -123,3 +127,17 @@ while True:
     print("Maximum available power:", round(max_power, 2), "W")
     print("Actual power output:", round(actual_power, 2), "W")
     print("\n")
+
+    # ask the user if they would like to run the program again
+    while True:
+        repeat = input("Run the program again? (yes or no) ")
+        if repeat.lower() == "yes":
+            print("")
+            break
+        elif repeat.lower() == "no":
+            break
+        else:
+            print("Please enter either yes or no.")
+            continue
+    if repeat.lower() == "no":
+        break
