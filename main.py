@@ -28,80 +28,98 @@ import math
 
 def get_input(message, input_name):
     while True:
-        userinput = input(message)
+        user_input = input(message)
 
-        if userinput.startswith("-"):
+        if user_input.startswith("-"):
             # Input should not be negative. Prompt the user to try again
-            # return float(userinput)
             print("Please enter a number greater than zero.")
             continue
 
         # check that the input starts with a number
-        if not userinput[0].isnumeric() and not userinput[0] == ".":
-            print(input_name, " must start with a number.")
+        if not user_input[0].isnumeric() and not user_input[0] == ".":
+            print(input_name, "must start with a number.")
             continue
 
         # remove any units from the end of the string, provided the string is not empty
-        while userinput and not userinput[-1].isnumeric():
-            userinput = userinput[:-1]
+        while user_input and not user_input[-1].isnumeric():
+            user_input = user_input[:-1]
 
         # check if any non-numeric characters remain in the middle of the string
-        if userinput.isnumeric():
-            return float(userinput)
+        if user_input.isnumeric():
+            if float(user_input) > 0:
+                return float(user_input)
+            print("Please enter a number greater than zero.")
+            continue
 
         # handle fractional inputs. Elif not necessary since this code won't run if the last return happens
-        if "/" in userinput and userinput.count("/") == 1:
+        if "/" in user_input and user_input.count("/") == 1:
             # split the string into numerator and denominator
-            userinput = userinput.split("/")
-            numerator = userinput[0]
-            denominator = userinput[1]
+            user_input = user_input.split("/")
+            numerator = user_input[0]
+            denominator = user_input[1]
 
-            # check whether numerator and denominator are numeric and compute the decimal equivalent
+            # check whether numerator and denominator are numeric and greater than zero,
+            # and compute the decimal equivalent
             if numerator.isnumeric() and denominator.isnumeric():
+                if float(numerator) <= 0:
+                    print("Please enter a number greater than zero.")
+                    continue
+                if float(denominator) <= 0:
+                    print("Divide by zero not supported.")
+                    continue
                 return float(numerator) / float(denominator)
             else:
-                print(input_name, " must be entered as either an integer, a decimal, or a fraction.")
+                print(input_name, "must be entered as either an integer, a decimal, or a fraction.")
                 continue
 
         # handle decimal inputs
-        if "." in userinput and userinput.count(".") == 1:
+        if "." in user_input and user_input.count(".") == 1:
             try:
-                return float(userinput)
+                # make sure the input is greater than zero
+                if float(user_input) > 0:
+                    return float(user_input)
+                print("Please enter a number greater than zero.")
+                continue
             except Exception as e:
                 print(e)
-                print(input_name, " must be entered as either an integer, a decimal, or a fraction.")
+                print(input_name, "must be entered as either an integer, a decimal, or a fraction.")
                 continue
 
-        # for c in userinput:
-        #     unsupported = ""
-        #     if not userinput[c].isnumeric() and not userinput[c] in unsupported:
-        #         unsupported.append(userinput[c])
-        #     if unsupported:
-        #         print("The characters ", unsupported)
-
-        # something else is wrong. Try again. If or else statement not necessary
-        # since a return will prevent this code from running
-        print(input_name, " must be entered as either an integer, a decimal, or a fraction.")
+        # something else is wrong, try again
+        print(input_name, "must be entered as either an integer, a decimal, or a fraction.")
         continue
 
 
-print("This program calculates the power output of a wind turbine, given its radius, the average wind speed, and the"
-      "operating efficiency of the turbine. The density of air is assumed to be 1.2 kg/m^2. All values must be given"
-      "as either an integer, a decimal, or a fraction. Scientific notation is not supported at this time. Units do"
-      "not need to be included.")
+print("This program calculates the power output of a wind turbine, given its radius, the average wind speed, and the \n"
+      "operating efficiency of the turbine. The density of air is assumed to be 1.2 kg/m\u00b2. All values must be"
+      " given \nas either an integer, a decimal, or a fraction. Scientific notation is not supported at this time. "
+      "Units do \nnot need to be included. \n")
 
 while True:
+    rho = 1.2
     radius = get_input("Enter the turbine radius in meters: ", "Turbine radius")
     windspeed = get_input("Enter the average wind speed in meters per second: ", "Wind speed")
-    efficiency = get_input("Enter the turbine's operating efficiency as a percent or decimal: ", "Operating efficiency")
-    rho = 1.2
 
-    # make sure the efficiency is no greater than 100%
-    if efficiency > 100:
-        print("Efficiency too high. Please enter a number less than 100%.")
-    elif efficiency > 1:
-        efficiency = efficiency/100
-        print("Efficiency entered as percent. Converted to decimal (", efficiency, ") for calculation")
+    while True:
+        efficiency = get_input("Enter the turbine's operating efficiency as a percent or decimal: ",
+                               "Operating efficiency")
+
+        # make sure the efficiency is no greater than 100%. Convert to decimal if above 1.0
+        if efficiency > 100:
+            print("\nEfficiency too high. Please enter a number less than 100%.")
+            continue
+        elif efficiency > 1:
+            efficiency = efficiency/100
+            print("\nEfficiency entered as percent. Converted to decimal (" + str(efficiency) + ") for calculation.")
+            break
+        else:
+            break
 
     area = math.pi * radius ** 2
-    maxpower =
+    max_power = 0.5 * rho * area * windspeed ** 3
+    actual_power = efficiency * max_power
+
+    print("\nTurbine area: ", round(area, 2), "m\u00b2")
+    print("Maximum available power:", round(max_power, 2), "W")
+    print("Actual power output:", round(actual_power, 2), "W")
+    print("\n")
