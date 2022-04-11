@@ -12,6 +12,9 @@
 
 import math
 
+JOULES_PER_CAPITA_OR = 2.57e10
+YEARS_PER_SECOND = 1 / (60 * 60 * 24 * 365)
+
 #######################################################################
 # Function: get_numeric_input
 # Description: Retrieves numeric input and checks for errors. Prompts
@@ -119,11 +122,15 @@ while True:
     area = math.pi * radius ** 2
     max_power = 0.5 * rho * area * windspeed ** 3
     actual_power = efficiency * max_power
+    num_turbines_per_person_OR = JOULES_PER_CAPITA_OR * (1 / actual_power) * YEARS_PER_SECOND
 
     print("\nTurbine area: ", round(area, 2), "m\u00b2")
     print("Maximum available power:", round(max_power, 2), "W")
     print("Actual power output:", round(actual_power, 2), "W")
     print("\n")
+    print("In 2019, the average Oregonian used roughly 2.58x10\u00b9\u2070 Joules of electricity. Given these "
+          "parameters, it\nwould take about", round(num_turbines_per_person_OR, 2), "wind turbines to produce enough "
+                                                                                    "electricity for one person.\n")
 
     # ask the user if they would like to run the program again
     while True:
